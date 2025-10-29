@@ -1,39 +1,33 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
+# Environment variables
+.env
+.env.local
+.env.production
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# Database configuration
+database.properties
+
+# IDE files
+.idea/
 *.iml
-*.ipr
+*.iws
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Build outputs
+target/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+*.war
+*.jar
 
-### VS Code ###
-.vscode/
+# Logs
+*.log
+logs/
 
-### Mac OS ###
+# OS files
 .DS_Store
+Thumbs.db
+
+# Tomcat
+tomcat/
+
+# Temporary files
+*.tmp
+*.temp
