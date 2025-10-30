@@ -55,4 +55,7 @@ public class User {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    public Boolean getActive() {
+        return isActive;
+    }
 }

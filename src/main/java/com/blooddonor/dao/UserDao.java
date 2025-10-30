@@ -86,4 +86,22 @@ public class UserDao {
         user.setActive(resultSet.getBoolean("is_active"));
         return user;
     }
+    public boolean update(User user) {
+        String sql = "UPDATE users SET email = ?, phone = ?, city = ?, full_name = ? WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPhone());
+            statement.setString(3, user.getCity());
+            statement.setString(4, user.getFullName());
+            statement.setLong(5, user.getId());
+
+            int affectedRows = statement.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

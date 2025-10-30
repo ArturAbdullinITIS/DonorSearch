@@ -43,4 +43,8 @@ public class UserService {
     public User findById(Long id) {
         return userDao.findById(id).orElse(null);
     }
+
+    public boolean updateUser(User user) {
+        return userDao.update(user);
+    }
 }

@@ -28,7 +28,6 @@ public class AuthenticationFilter implements Filter {
         boolean isStaticResource = path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/images/");
 
         if (isLoggedIn && (isLoginPage || isRegisterPage)) {
-            // Если пользователь уже вошел, перенаправляем на главную
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/");
             return;
         }

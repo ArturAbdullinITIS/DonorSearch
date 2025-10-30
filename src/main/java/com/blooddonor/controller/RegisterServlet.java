@@ -81,7 +81,7 @@ public class RegisterServlet extends HttpServlet {
             boolean success = userService.register(user, password);
 
             if (success) {
-                response.sendRedirect(request.getContextPath() + "/login?success=registered");
+                response.sendRedirect(request.getContextPath() + "/?registered=true");
             } else {
                 request.setAttribute("error", "Ошибка при регистрации. Попробуйте еще раз.");
                 request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
