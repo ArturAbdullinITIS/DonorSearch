@@ -53,6 +53,7 @@ public class DatabaseConnection {
         }
     }
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, username, password);
+        String urlWithEncoding = url + "?useUnicode=true&characterEncoding=UTF-8";
+        return DriverManager.getConnection(urlWithEncoding, username, password);
     }
 }
