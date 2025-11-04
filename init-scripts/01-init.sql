@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS donor_profiles (
                                               user_id BIGINT NOT NULL UNIQUE,
                                               blood_type VARCHAR(2) NOT NULL CHECK (blood_type IN ('A', 'B', 'AB', 'O')),
                                               rh_factor VARCHAR(8) NOT NULL CHECK (rh_factor IN ('POSITIVE', 'NEGATIVE')),
-                                              last_donation_date DATE,
                                               is_ready_to_donate BOOLEAN DEFAULT TRUE,
                                               additional_info TEXT,
                                               FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -53,12 +52,24 @@ CREATE TABLE IF NOT EXISTS responses (
                                          UNIQUE (request_id, donor_id)
 );
 
+-- Таблица активности пользователей
+CREATE TABLE IF NOT EXISTS activities (
+                                          id BIGSERIAL PRIMARY KEY,
+                                          user_id BIGINT NOT NULL,
+                                          type VARCHAR(50) NOT NULL,
+                                          title VARCHAR(200) NOT NULL,
+                                          description TEXT,
+                                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 
 CREATE INDEX IF NOT EXISTS idx_donor_profiles_blood ON donor_profiles(blood_type, rh_factor, is_ready_to_donate);
 CREATE INDEX IF NOT EXISTS idx_requests_blood ON donation_requests(blood_type_needed, rh_factor_needed, status);
 CREATE INDEX IF NOT EXISTS idx_requests_author ON donation_requests(author_id);
 CREATE INDEX IF NOT EXISTS idx_responses_donor ON responses(donor_id);
 CREATE INDEX IF NOT EXISTS idx_responses_request ON responses(request_id);
+CREATE INDEX IF NOT EXISTS idx_activities_user ON activities(user_id, created_at DESC);
 
 
 CREATE OR REPLACE FUNCTION update_updated_at_column()

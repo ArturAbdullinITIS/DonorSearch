@@ -11,8 +11,8 @@ public class DonorProfileDao {
 
     public DonorProfile create(DonorProfile profile) throws SQLException {
         String sql = "INSERT INTO donor_profiles (user_id, blood_type, rh_factor, " +
-                "last_donation_date, is_ready_to_donate, additional_info) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "is_ready_to_donate, additional_info) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -20,10 +20,8 @@ public class DonorProfileDao {
             stmt.setLong(1, profile.getUserId());
             stmt.setString(2, profile.getBloodType());
             stmt.setString(3, profile.getRhFactor());
-            stmt.setDate(4, profile.getLastDonationDate() != null ?
-                    Date.valueOf(profile.getLastDonationDate()) : null);
-            stmt.setBoolean(5, profile.isReadyToDonate());
-            stmt.setString(6, profile.getAdditionalInfo());
+            stmt.setBoolean(4, profile.isReadyToDonate());
+            stmt.setString(5, profile.getAdditionalInfo());
 
             stmt.executeUpdate();
 
@@ -102,7 +100,7 @@ public class DonorProfileDao {
             params.add("%" + city + "%");
         }
 
-        sql.append(" ORDER BY dp.last_donation_date NULLS FIRST, u.full_name");
+        sql.append(" ORDER BY u.full_name");
 
         List<DonorProfile> donors = new ArrayList<>();
 
@@ -125,7 +123,7 @@ public class DonorProfileDao {
 
     public void update(DonorProfile profile) throws SQLException {
         String sql = "UPDATE donor_profiles SET blood_type = ?, rh_factor = ?, " +
-                "last_donation_date = ?, is_ready_to_donate = ?, additional_info = ? " +
+                "is_ready_to_donate = ?, additional_info = ? " +
                 "WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -133,11 +131,9 @@ public class DonorProfileDao {
 
             stmt.setString(1, profile.getBloodType());
             stmt.setString(2, profile.getRhFactor());
-            stmt.setDate(3, profile.getLastDonationDate() != null ?
-                    Date.valueOf(profile.getLastDonationDate()) : null);
-            stmt.setBoolean(4, profile.isReadyToDonate());
-            stmt.setString(5, profile.getAdditionalInfo());
-            stmt.setLong(6, profile.getId());
+            stmt.setBoolean(3, profile.isReadyToDonate());
+            stmt.setString(4, profile.getAdditionalInfo());
+            stmt.setLong(5, profile.getId());
 
             stmt.executeUpdate();
         }
@@ -160,14 +156,9 @@ public class DonorProfileDao {
         profile.setUserId(rs.getLong("user_id"));
         profile.setBloodType(rs.getString("blood_type"));
         profile.setRhFactor(rs.getString("rh_factor"));
-
-        Date lastDonation = rs.getDate("last_donation_date");
-        if (lastDonation != null) {
-            profile.setLastDonationDate(lastDonation.toLocalDate());
-        }
-
         profile.setReadyToDonate(rs.getBoolean("is_ready_to_donate"));
         profile.setAdditionalInfo(rs.getString("additional_info"));
+
         profile.setUserName(rs.getString("full_name"));
         profile.setUserCity(rs.getString("city"));
         profile.setUserPhone(rs.getString("phone"));

@@ -1,7 +1,5 @@
 package com.blooddonor.filter;
 
-import com.blooddonor.model.User;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ public class AuthenticationFilter implements Filter {
         boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
         boolean isLoginPage = path.equals("/login");
         boolean isRegisterPage = path.equals("/register");
-        boolean isStaticResource = path.startsWith("/css/") || path.startsWith("/js/") || path.startsWith("/images/");
 
         if (isLoggedIn && (isLoginPage || isRegisterPage)) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/");

@@ -66,7 +66,7 @@ public class ResponseDao {
                 "LEFT JOIN donor_profiles dp ON dp.user_id = u.id " +
                 "JOIN donation_requests dr ON r.request_id = dr.id " +
                 "WHERE r.request_id = ? " +
-                "ORDER BY r.created_at DESC";
+                "ORDER BY r.response_date DESC";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -92,7 +92,7 @@ public class ResponseDao {
                 "LEFT JOIN donor_profiles dp ON dp.user_id = u.id " +
                 "JOIN donation_requests dr ON r.request_id = dr.id " +
                 "WHERE r.donor_id = ? " +
-                "ORDER BY r.created_at DESC";
+                "ORDER BY r.response_date DESC";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -159,7 +159,7 @@ public class ResponseDao {
         response.setMessage(rs.getString("message"));
         response.setStatus(rs.getString("status"));
 
-        Timestamp created = rs.getTimestamp("created_at");
+        Timestamp created = rs.getTimestamp("response_date");
         if (created != null) {
             response.setCreatedAt(created.toLocalDateTime());
         }

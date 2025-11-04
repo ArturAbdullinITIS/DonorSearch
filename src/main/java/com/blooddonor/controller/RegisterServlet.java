@@ -1,43 +1,30 @@
 package com.blooddonor.controller;
 
+import com.blooddonor.dao.ActivityDao;
+import com.blooddonor.di.ServiceContainer;
+import com.blooddonor.model.Activity;
 import com.blooddonor.model.User;
 import com.blooddonor.service.UserService;
-import com.blooddonor.util.DatabaseConnection;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
     private UserService userService;
+    private ActivityDao activityDao;
 
     @Override
     public void init() throws ServletException {
         super.init();
-
-        ServletContext context = getServletContext();
-        UserService service = (UserService) context.getAttribute("userService");
-
-        if (service == null) {
-            try {
-                Connection connection = DatabaseConnection.getConnection();
-                userService = new UserService(connection);
-                context.setAttribute("userService", userService);
-            } catch (SQLException e) {
-                throw new ServletException("failed to init UserService", e);
-            }
-        } else {
-            userService = service;
-            System.out.println("UserService from context success");
-        }
+        ServiceContainer container = ServiceContainer.getInstance();
+        userService = container.getService(UserService.class);
+        activityDao = container.getService(ActivityDao.class);
     }
 
     @Override
@@ -81,6 +68,17 @@ public class RegisterServlet extends HttpServlet {
             boolean success = userService.register(user, password);
 
             if (success) {
+                try {
+                    Activity activity = new Activity(
+                        user.getId(),
+                        "Регистрация",
+                        "Добро пожаловать!",
+                        "Вы успешно зарегистрировались в системе поиска доноров крови"
+                    );
+                    activityDao.createActivity(activity);
+                } catch (Exception ignored) {
+                }
+
                 response.sendRedirect(request.getContextPath() + "/?registered=true");
             } else {
                 request.setAttribute("error", "Ошибка при регистрации. Попробуйте еще раз.");
@@ -88,7 +86,6 @@ public class RegisterServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             request.setAttribute("error", "Произошла ошибка при регистрации: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
         }

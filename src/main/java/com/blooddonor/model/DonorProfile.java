@@ -1,13 +1,10 @@
 package com.blooddonor.model;
 
-import java.time.LocalDate;
-
 public class DonorProfile {
     private Long id;
     private Long userId;
-    private String bloodType; // A, B, AB, O
-    private String rhFactor; // POSITIVE, NEGATIVE
-    private LocalDate lastDonationDate;
+    private String bloodType;
+    private String rhFactor;
     private boolean readyToDonate;
     private String additionalInfo;
 
@@ -35,11 +32,6 @@ public class DonorProfile {
 
     public String getRhFactor() { return rhFactor; }
     public void setRhFactor(String rhFactor) { this.rhFactor = rhFactor; }
-
-    public LocalDate getLastDonationDate() { return lastDonationDate; }
-    public void setLastDonationDate(LocalDate lastDonationDate) {
-        this.lastDonationDate = lastDonationDate;
-    }
 
     public boolean isReadyToDonate() { return readyToDonate; }
     public void setReadyToDonate(boolean readyToDonate) {
