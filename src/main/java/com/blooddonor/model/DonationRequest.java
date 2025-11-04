@@ -10,10 +10,10 @@ public class DonationRequest {
     private String rhFactorNeeded;
     private String city;
     private String hospital;
-    private String urgencyLevel; // LOW, MEDIUM, HIGH, CRITICAL
+    private String urgencyLevel;
     private String description;
     private String contactInfo;
-    private String status; // ACTIVE, CLOSED, FULFILLED
+    private String status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

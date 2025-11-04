@@ -39,25 +39,6 @@
             transform: translateX(10px);
             background: white;
         }
-        .btn-primary-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-        }
-        .btn-outline-custom {
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            background: transparent;
-        }
-        .btn-outline-custom:hover {
-            background: #667eea;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -137,18 +118,18 @@
                                 <i class="fas fa-user-circle me-2"></i>
                                 Вы вошли как <strong>${sessionScope.user.login}</strong>
                             </p>
-                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary-custom btn-lg me-3">
+                            <a href="${pageContext.request.contextPath}/dashboard" class="btn btn-primary btn-lg me-3">
                                 <i class="fas fa-tachometer-alt me-2"></i>Панель управления
                             </a>
-                            <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-custom btn-lg">
+                            <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-primary btn-lg">
                                 <i class="fas fa-sign-out-alt me-2"></i>Выйти
                             </a>
                         </c:when>
                         <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/login" class="btn btn-primary-custom btn-lg me-3">
+                            <a href="${pageContext.request.contextPath}/login" class="btn btn-primary btn-lg me-3">
                                 <i class="fas fa-sign-in-alt me-2"></i>Войти в систему
                             </a>
-                            <a href="${pageContext.request.contextPath}/register" class="btn btn-outline-custom btn-lg">
+                            <a href="${pageContext.request.contextPath}/register" class="btn btn-outline-primary btn-lg">
                                 <i class="fas fa-user-plus me-2"></i>Зарегистрироваться
                             </a>
                         </c:otherwise>

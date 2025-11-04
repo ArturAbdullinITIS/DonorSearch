@@ -21,7 +21,6 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
         loadDatabaseProperties();
-
     }
 
     private static void loadDatabaseProperties() {
@@ -39,7 +38,7 @@ public class DatabaseConnection {
 
             Properties props = new Properties();
             props.load(input);
-            url = props.getProperty("db.url", url);        // Второй параметр - значение по умолчанию
+            url = props.getProperty("db.url", url);
             username = props.getProperty("db.username", username);
             password = props.getProperty("db.password", password);
 
@@ -52,6 +51,7 @@ public class DatabaseConnection {
             System.err.println("Failure reading database.properties: " + e.getMessage());
         }
     }
+
     public static Connection getConnection() throws SQLException {
         String urlWithEncoding = url + "?useUnicode=true&characterEncoding=UTF-8";
         return DriverManager.getConnection(urlWithEncoding, username, password);

@@ -11,8 +11,8 @@ public class DonationRequestDao {
 
     public DonationRequest create(DonationRequest request) throws SQLException {
         String sql = "INSERT INTO donation_requests (author_id, patient_name, " +
-                "blood_type_needed, rh_factor_needed, city, hospital, " +
-                "urgency_level, description, contact_info, status) " +
+                "blood_type_needed, rh_factor_needed, hospital_name, hospital_address, " +
+                "urgency, description, contact_info, status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -22,8 +22,8 @@ public class DonationRequestDao {
             stmt.setString(2, request.getPatientName());
             stmt.setString(3, request.getBloodTypeNeeded());
             stmt.setString(4, request.getRhFactorNeeded());
-            stmt.setString(5, request.getCity());
-            stmt.setString(6, request.getHospital());
+            stmt.setString(5, request.getHospital());
+            stmt.setString(6, request.getCity());
             stmt.setString(7, request.getUrgencyLevel());
             stmt.setString(8, request.getDescription());
             stmt.setString(9, request.getContactInfo());
@@ -42,8 +42,10 @@ public class DonationRequestDao {
     }
 
     public DonationRequest findById(Long id) throws SQLException {
-        String sql = "SELECT dr.*, u.full_name as author_name, " +
-                "(SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
+        String sql = "SELECT dr.id, dr.author_id, dr.patient_name, dr.blood_type_needed, dr.rh_factor_needed, " +
+                "dr.hospital_name AS hospital, dr.hospital_address AS city, dr.urgency AS urgency_level, " +
+                "dr.description, dr.contact_info, dr.status, dr.created_at, dr.updated_at, " +
+                "u.full_name as author_name, (SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
                 "FROM donation_requests dr " +
                 "JOIN users u ON dr.author_id = u.id " +
                 "WHERE dr.id = ?";
@@ -63,19 +65,23 @@ public class DonationRequestDao {
     }
 
     public List<DonationRequest> findAll() throws SQLException {
-        String sql = "SELECT dr.*, u.full_name as author_name, " +
-                "(SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
+        String sql = "SELECT dr.id, dr.author_id, dr.patient_name, dr.blood_type_needed, dr.rh_factor_needed, " +
+                "dr.hospital_name AS hospital, dr.hospital_address AS city, dr.urgency AS urgency_level, " +
+                "dr.description, dr.contact_info, dr.status, dr.created_at, dr.updated_at, " +
+                "u.full_name as author_name, (SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
                 "FROM donation_requests dr " +
                 "JOIN users u ON dr.author_id = u.id " +
                 "WHERE dr.status = 'ACTIVE' " +
-                "ORDER BY dr.urgency_level DESC, dr.created_at DESC";
+                "ORDER BY dr.urgency DESC, dr.created_at DESC";
 
         return executeQueryForList(sql);
     }
 
     public List<DonationRequest> findByAuthor(Long authorId) throws SQLException {
-        String sql = "SELECT dr.*, u.full_name as author_name, " +
-                "(SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
+        String sql = "SELECT dr.id, dr.author_id, dr.patient_name, dr.blood_type_needed, dr.rh_factor_needed, " +
+                "dr.hospital_name AS hospital, dr.hospital_address AS city, dr.urgency AS urgency_level, " +
+                "dr.description, dr.contact_info, dr.status, dr.created_at, dr.updated_at, " +
+                "u.full_name as author_name, (SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
                 "FROM donation_requests dr " +
                 "JOIN users u ON dr.author_id = u.id " +
                 "WHERE dr.author_id = ? " +
@@ -98,13 +104,15 @@ public class DonationRequestDao {
 
     public List<DonationRequest> searchByBloodType(String bloodType, String rhFactor)
             throws SQLException {
-        String sql = "SELECT dr.*, u.full_name as author_name, " +
-                "(SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
+        String sql = "SELECT dr.id, dr.author_id, dr.patient_name, dr.blood_type_needed, dr.rh_factor_needed, " +
+                "dr.hospital_name AS hospital, dr.hospital_address AS city, dr.urgency AS urgency_level, " +
+                "dr.description, dr.contact_info, dr.status, dr.created_at, dr.updated_at, " +
+                "u.full_name as author_name, (SELECT COUNT(*) FROM responses WHERE request_id = dr.id) as responses_count " +
                 "FROM donation_requests dr " +
                 "JOIN users u ON dr.author_id = u.id " +
                 "WHERE dr.status = 'ACTIVE' " +
                 "AND dr.blood_type_needed = ? AND dr.rh_factor_needed = ? " +
-                "ORDER BY dr.urgency_level DESC, dr.created_at DESC";
+                "ORDER BY dr.urgency DESC, dr.created_at DESC";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -124,8 +132,8 @@ public class DonationRequestDao {
 
     public void update(DonationRequest request) throws SQLException {
         String sql = "UPDATE donation_requests SET patient_name = ?, " +
-                "blood_type_needed = ?, rh_factor_needed = ?, city = ?, " +
-                "hospital = ?, urgency_level = ?, description = ?, " +
+                "blood_type_needed = ?, rh_factor_needed = ?, hospital_address = ?, " +
+                "hospital_name = ?, urgency = ?, description = ?, " +
                 "contact_info = ?, status = ?, updated_at = CURRENT_TIMESTAMP " +
                 "WHERE id = ?";
 

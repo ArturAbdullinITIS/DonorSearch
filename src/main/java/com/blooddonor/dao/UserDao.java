@@ -12,6 +12,7 @@ public class UserDao {
     public UserDao(Connection connection) {
         this.connection = connection;
     }
+
     public Optional<User> findByLogin(String login) {
         String sql = "SELECT * FROM users WHERE login = ? AND is_active = true";
 
@@ -28,6 +29,7 @@ public class UserDao {
 
         return Optional.empty();
     }
+
     public Optional<User> findById(Long id) {
         String sql = "SELECT * FROM users WHERE id = ? AND is_active = true";
 
@@ -86,6 +88,7 @@ public class UserDao {
         user.setActive(resultSet.getBoolean("is_active"));
         return user;
     }
+
     public boolean update(User user) {
         String sql = "UPDATE users SET email = ?, phone = ?, city = ?, full_name = ? WHERE id = ?";
 

@@ -7,7 +7,7 @@ public class Response {
     private Long requestId;
     private Long donorId;
     private String message;
-    private String status; // PENDING, ACCEPTED, REJECTED
+    private String status;
     private LocalDateTime createdAt;
 
     private String donorName;
