@@ -40,6 +40,22 @@
         border-color: #667eea;
         font-weight: 600;
     }
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .card-header {
+        padding: 1rem 1.25rem !important;
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .card-body {
+        padding: 1.25rem !important;
+        border-radius: 0 !important;
+    }
+    .card-footer {
+        padding: 1rem 1.25rem !important;
+        border-radius: 0 0 15px 15px !important;
+    }
 </style>
 
 <div class="page-header profile-page-header">
@@ -137,6 +153,15 @@
                                     <i class="fas fa-save"></i> Сохранить
                                 </button>
                             </div>
+                        </form>
+
+                        <hr class="my-4">
+
+                        <form action="${pageContext.request.contextPath}/profile" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить свой профиль? Это действие нельзя отменить!');">
+                            <input type="hidden" name="form" value="delete">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-2"></i>Удалить профиль
+                            </button>
                         </form>
                     </div>
                 </div>

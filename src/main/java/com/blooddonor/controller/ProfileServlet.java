@@ -75,6 +75,12 @@ public class ProfileServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute("user");
 
         String form = request.getParameter("form");
+
+        if ("delete".equals(form)) {
+            handleDeleteProfile(request, response, currentUser, session);
+            return;
+        }
+
         if ("donor".equals(form)) {
             handleDonorProfile(request, response, currentUser);
             return;
@@ -123,6 +129,41 @@ public class ProfileServlet extends HttpServlet {
         } catch (Exception ignored) {}
 
         request.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+    }
+
+    private void handleDeleteProfile(HttpServletRequest request, HttpServletResponse response, User currentUser, HttpSession session)
+            throws ServletException, IOException {
+        try {
+            boolean success = userService.deleteUser(currentUser.getId());
+
+            if (success) {
+                try {
+                    Activity activity = new Activity(
+                        currentUser.getId(),
+                        "Профиль",
+                        "Удаление профиля",
+                        "Пользователь удалил свой профиль"
+                    );
+                    activityDao.createActivity(activity);
+                } catch (Exception ignored) {
+                }
+
+                session.invalidate();
+                response.sendRedirect(request.getContextPath() + "/?deleted=true");
+            } else {
+                request.setAttribute("error", "Ошибка при удалении профиля");
+                DonorProfile donorProfile = donorProfileService.getDonorProfileByUserId(currentUser.getId());
+                request.setAttribute("donorProfile", donorProfile);
+                request.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            request.setAttribute("error", "Произошла ошибка при удалении профиля: " + e.getMessage());
+            try {
+                DonorProfile donorProfile = donorProfileService.getDonorProfileByUserId(currentUser.getId());
+                request.setAttribute("donorProfile", donorProfile);
+            } catch (Exception ignored) {}
+            request.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
+        }
     }
 
     private void handleDonorProfile(HttpServletRequest request, HttpServletResponse response, User currentUser)

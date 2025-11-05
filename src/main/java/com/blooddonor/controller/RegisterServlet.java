@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/register")
@@ -79,7 +80,9 @@ public class RegisterServlet extends HttpServlet {
                 } catch (Exception ignored) {
                 }
 
-                response.sendRedirect(request.getContextPath() + "/?registered=true");
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                response.sendRedirect(request.getContextPath() + "/dashboard");
             } else {
                 request.setAttribute("error", "Ошибка при регистрации. Попробуйте еще раз.");
                 request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);

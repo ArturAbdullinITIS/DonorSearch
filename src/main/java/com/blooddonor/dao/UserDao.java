@@ -107,4 +107,57 @@ public class UserDao {
             return false;
         }
     }
+
+    public boolean delete(Long userId) {
+        String deleteDonationRequests = "DELETE FROM donation_requests WHERE author_id = ?";
+        String deleteUser = "DELETE FROM users WHERE id = ?";
+
+        try {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement stmt1 = connection.prepareStatement(deleteDonationRequests)) {
+                stmt1.setLong(1, userId);
+                stmt1.executeUpdate();
+            }
+
+            try (PreparedStatement stmt2 = connection.prepareStatement(deleteUser)) {
+                stmt2.setLong(1, userId);
+                int affectedRows = stmt2.executeUpdate();
+
+                connection.commit();
+                return affectedRows > 0;
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public java.util.List<User> findAll() {
+        String sql = "SELECT * FROM users ORDER BY created_at DESC";
+        java.util.List<User> users = new java.util.ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                users.add(mapResultSetToUser(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 }

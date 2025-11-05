@@ -14,6 +14,18 @@
         border-radius: 15px;
         overflow: hidden;
     }
+    .card-header {
+        padding: 1rem 1.25rem !important;
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .card-body {
+        padding: 1.25rem !important;
+        border-radius: 0 !important;
+    }
+    .card-footer {
+        padding: 1rem 1.25rem !important;
+        border-radius: 0 0 15px 15px !important;
+    }
 </style>
 
 <div class="page-header my-responses-page-header">

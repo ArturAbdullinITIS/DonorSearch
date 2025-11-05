@@ -200,16 +200,20 @@ public class DonationRequestServlet extends HttpServlet {
             return true;
         }
 
+        if (recipientBloodType.equals("AB")) {
+            return true;
+        }
+
         if (donorBloodType.equals("AB")) {
-            return recipientBloodType.equals("AB");
+            return false;
         }
 
         if (donorBloodType.equals("A")) {
-            return recipientBloodType.equals("A") || recipientBloodType.equals("AB");
+            return recipientBloodType.equals("A");
         }
 
         if (donorBloodType.equals("B")) {
-            return recipientBloodType.equals("B") || recipientBloodType.equals("AB");
+            return recipientBloodType.equals("B");
         }
 
         return false;
