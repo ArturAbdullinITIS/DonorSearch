@@ -47,4 +47,8 @@ public class UserService {
     public boolean updateUser(User user) {
         return userDao.update(user);
     }
+
+    public boolean deleteUser(Long userId) {
+        return userDao.delete(userId);
+    }
 }

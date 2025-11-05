@@ -70,6 +70,14 @@
                     </div>
                 </c:if>
 
+                <c:if test="${not empty param.deleted}">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Профиль удален</strong> Ваш аккаунт был успешно деактивирован.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </c:if>
+
                 <!-- Функционал -->
                 <div class="row mb-5">
                     <div class="col-md-6">

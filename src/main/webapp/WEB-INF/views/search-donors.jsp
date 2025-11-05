@@ -13,6 +13,26 @@
         border-radius: 15px;
         overflow: hidden;
     }
+    .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .ajax-search-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+    }
+    .ajax-search-btn:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
 </style>
 
 <div class="page-header search-donors-page-header">
@@ -28,7 +48,7 @@
             <h4 class="mb-0"><i class="fas fa-filter me-2"></i>Параметры поиска</h4>
         </div>
         <div class="card-body">
-            <form action="${pageContext.request.contextPath}/search" method="get">
+            <form id="searchForm" action="${pageContext.request.contextPath}/search" method="get">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="mb-3">
@@ -65,8 +85,8 @@
                     <div class="col-md-2">
                         <div class="mb-3">
                             <label class="form-label">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-search me-2"></i>Найти
+                            <button type="button" id="ajaxSearchBtn" class="btn ajax-search-btn text-white w-100">
+                                <i class="fas fa-search me-2"></i>Поиск
                             </button>
                         </div>
                     </div>
@@ -74,6 +94,17 @@
             </form>
         </div>
     </div>
+
+    <div id="loadingIndicator" style="display: none;">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <div class="loader"></div>
+                <p class="mt-3 text-muted">Поиск доноров...</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="searchResults"></div>
 
     <c:if test="${searchPerformed}">
         <c:if test="${empty donors}">
@@ -112,7 +143,7 @@
                                         <i class="fas fa-phone text-success me-2"></i><strong>Телефон:</strong> ${donor.userPhone}
                                     </p>
                                 </c:if>
-                                <c:if test="${donor.readyToDonate}">
+ar                                <c:if test="${donor.readyToDonate}">
                                     <div class="mt-3">
                                         <span class="badge bg-success w-100 py-2">
                                             <i class="fas fa-check-circle me-1"></i>Готов быть донором
@@ -133,5 +164,119 @@
         </c:if>
     </c:if>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#ajaxSearchBtn').click(function() {
+        var bloodType = $('#bloodType').val();
+        var rhFactor = $('#rhFactor').val();
+        var city = $('#city').val();
+
+        if (!bloodType || !rhFactor) {
+            alert('Пожалуйста, выберите группу крови и резус-фактор');
+            return;
+        }
+
+        $('#loadingIndicator').show();
+        $('#searchResults').empty();
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/search',
+            type: 'GET',
+            data: {
+                bloodType: bloodType,
+                rhFactor: rhFactor,
+                city: city,
+                ajax: 'true'
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#loadingIndicator').hide();
+
+                if (response.success) {
+                    if (response.count === 0) {
+                        $('#searchResults').html(
+                            '<div class="card border-0 shadow-sm">' +
+                            '  <div class="card-body text-center py-5">' +
+                            '    <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>' +
+                            '    <h5>По вашему запросу доноров не найдено. Попробуйте изменить параметры поиска.</h5>' +
+                            '  </div>' +
+                            '</div>'
+                        );
+                    } else {
+                        var html = '<div class="alert alert-success mb-4">' +
+                                   '  <i class="fas fa-check-circle me-2"></i>' +
+                                   '  <strong>Найдено доноров: ' + response.count + '</strong>' +
+                                   '</div>' +
+                                   '<div class="row">';
+
+                        response.donors.forEach(function(donor) {
+                            html += '<div class="col-md-4 mb-4">' +
+                                    '  <div class="card h-100 shadow-sm border-0">' +
+                                    '    <div class="card-header bg-white border-0">' +
+                                    '      <div class="d-flex justify-content-between align-items-center">' +
+                                    '        <span class="badge bg-danger fs-6">' + donor.bloodType + '</span>' +
+                                    '        <span class="badge bg-info fs-6">' + (donor.rhFactor === 'POSITIVE' ? 'Rh+' : 'Rh-') + '</span>' +
+                                    '      </div>' +
+                                    '    </div>' +
+                                    '    <div class="card-body">' +
+                                    '      <h5 class="card-title"><i class="fas fa-user me-2" style="color: #667eea;"></i>' + donor.userName + '</h5>' +
+                                    '      <hr>' +
+                                    '      <p class="card-text mb-2">' +
+                                    '        <i class="fas fa-map-marker-alt me-2" style="color: #667eea;"></i><strong>Город:</strong> ' + donor.userCity +
+                                    '      </p>';
+
+                            if (donor.userPhone) {
+                                html += '      <p class="card-text mb-2">' +
+                                        '        <i class="fas fa-phone text-success me-2"></i><strong>Телефон:</strong> ' + donor.userPhone +
+                                        '      </p>';
+                            }
+
+                            if (donor.readyToDonate) {
+                                html += '      <div class="mt-3">' +
+                                        '        <span class="badge bg-success w-100 py-2">' +
+                                        '          <i class="fas fa-check-circle me-1"></i>Готов быть донором' +
+                                        '        </span>' +
+                                        '      </div>';
+                            }
+
+                            if (donor.additionalInfo) {
+                                html += '      <hr>' +
+                                        '      <p class="card-text text-muted small">' +
+                                        '        <i class="fas fa-info-circle me-1"></i>' + donor.additionalInfo +
+                                        '      </p>';
+                            }
+
+                            html += '    </div>' +
+                                    '  </div>' +
+                                    '</div>';
+                        });
+
+                        html += '</div>';
+                        $('#searchResults').html(html);
+                    }
+                } else {
+                    $('#searchResults').html(
+                        '<div class="alert alert-danger">' +
+                        '  <i class="fas fa-exclamation-circle me-2"></i>' +
+                        '  <strong>Ошибка:</strong> ' + response.message +
+                        '</div>'
+                    );
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#loadingIndicator').hide();
+                $('#searchResults').html(
+                    '<div class="alert alert-danger">' +
+                    '  <i class="fas fa-exclamation-circle me-2"></i>' +
+                    '  <strong>Ошибка при выполнении запроса:</strong> ' + error +
+                    '</div>'
+                );
+            }
+        });
+    });
+});
+</script>
 
 <jsp:include page="footer.jsp"/>

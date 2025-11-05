@@ -138,6 +138,15 @@
                                 </button>
                             </div>
                         </form>
+
+                        <hr class="my-4">
+
+                        <form action="${pageContext.request.contextPath}/profile" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить свой профиль? Это действие нельзя отменить!');">
+                            <input type="hidden" name="form" value="delete">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-2"></i>Удалить профиль
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
