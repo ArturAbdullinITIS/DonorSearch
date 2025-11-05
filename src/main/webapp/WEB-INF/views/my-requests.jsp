@@ -22,13 +22,15 @@
         box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
     }
     .card-header {
-        padding: 0.75rem 1rem;
+        padding: 1rem 1.25rem !important;
         background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%) !important;
         border-bottom: 1px solid rgba(102, 126, 234, 0.1) !important;
+        border-radius: 15px 15px 0 0 !important;
     }
     .card-body {
-        padding: 1rem;
+        padding: 1.25rem !important;
         background: white;
+        border-radius: 0 !important;
     }
     .card-title {
         font-size: 1.1rem;
@@ -40,9 +42,10 @@
         line-height: 1.6;
     }
     .card-footer {
-        padding: 0.75rem 1rem;
+        padding: 1rem 1.25rem !important;
         background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(233, 236, 239, 0.8) 100%) !important;
         border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-radius: 0 0 15px 15px !important;
     }
     .badge {
         font-weight: 500;

@@ -13,6 +13,14 @@
         border-radius: 15px;
         overflow: hidden;
     }
+    .card-header {
+        padding: 1rem 1.25rem !important;
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .card-body {
+        padding: 1.25rem !important;
+        border-radius: 0 !important;
+    }
     .info-badge {
         background-color: #e7f3ff;
         color: #0066cc;

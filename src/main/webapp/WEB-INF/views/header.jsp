@@ -33,6 +33,24 @@
         .recent-activity { background: rgba(255,255,255,0.95); border-radius: 15px; padding: 1.25rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
         .activity-item { padding: 1rem; border-left: 3px solid #667eea; margin-bottom: 1rem; background: #f8f9fa; border-radius: 0 8px 8px 0; }
         .badge-custom { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 6px 12px; border-radius: 20px; font-weight: 500; }
+
+        /* Глобальные стили для всех карточек */
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 1rem 1.25rem !important;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .card-body {
+            padding: 1.25rem !important;
+            border-radius: 0 !important;
+        }
+        .card-footer {
+            padding: 1rem 1.25rem !important;
+            border-radius: 0 0 15px 15px !important;
+        }
     </style>
 </head>
 <body>

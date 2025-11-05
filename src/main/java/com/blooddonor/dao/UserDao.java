@@ -143,4 +143,21 @@ public class UserDao {
             }
         }
     }
+
+    public java.util.List<User> findAll() {
+        String sql = "SELECT * FROM users ORDER BY created_at DESC";
+        java.util.List<User> users = new java.util.ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                users.add(mapResultSetToUser(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 }

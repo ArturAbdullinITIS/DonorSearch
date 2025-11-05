@@ -2,6 +2,7 @@ package com.blooddonor.controller;
 
 import com.blooddonor.di.ServiceContainer;
 import com.blooddonor.model.DonorProfile;
+import com.blooddonor.model.User;
 import com.blooddonor.service.DonorProfileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,11 +11,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet("/search")
 public class SearchDonorsServlet extends HttpServlet {
@@ -39,6 +42,13 @@ public class SearchDonorsServlet extends HttpServlet {
         String city = request.getParameter("city");
         String ajax = request.getParameter("ajax");
 
+        HttpSession session = request.getSession(false);
+        Long currentUserId = null;
+        if (session != null && session.getAttribute("user") != null) {
+            User currentUser = (User) session.getAttribute("user");
+            currentUserId = currentUser.getId();
+        }
+
         try {
             List<DonorProfile> donors = null;
 
@@ -47,6 +57,13 @@ public class SearchDonorsServlet extends HttpServlet {
                     donors = donorProfileService.searchDonors(bloodType, rhFactor, city.trim());
                 } else {
                     donors = donorProfileService.searchDonors(bloodType, rhFactor, null);
+                }
+
+                if (donors != null && currentUserId != null) {
+                    final Long userId = currentUserId;
+                    donors = donors.stream()
+                            .filter(donor -> !donor.getUserId().equals(userId))
+                            .collect(Collectors.toList());
                 }
 
                 if ("true".equals(ajax)) {

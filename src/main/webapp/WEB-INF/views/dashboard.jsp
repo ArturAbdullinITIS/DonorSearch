@@ -9,10 +9,25 @@
         padding: 2rem 0;
         margin-bottom: 2rem;
     }
-    /* Убираем принудительное растягивание карточек */
     .dashboard-card {
         border-radius: 15px;
         overflow: hidden;
+    }
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .card-header {
+        padding: 1rem 1.25rem !important;
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .card-body {
+        padding: 1.25rem !important;
+        border-radius: 0 !important;
+    }
+    .card-footer {
+        padding: 1rem 1.25rem !important;
+        border-radius: 0 0 15px 15px !important;
     }
 </style>
 

@@ -13,6 +13,18 @@
         border-radius: 15px;
         overflow: hidden;
     }
+    .card-header {
+        padding: 1rem 1.25rem !important;
+        border-radius: 15px 15px 0 0 !important;
+    }
+    .card-body {
+        padding: 1.25rem !important;
+        border-radius: 0 !important;
+    }
+    .card-footer {
+        padding: 1rem 1.25rem !important;
+        border-radius: 0 0 15px 15px !important;
+    }
     .loader {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #667eea;

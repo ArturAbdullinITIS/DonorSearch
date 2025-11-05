@@ -84,4 +84,3 @@ CREATE TRIGGER update_donation_requests_updated_at
     BEFORE UPDATE ON donation_requests
     FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
-                                                                                                                                                  (3, 'Анна Смирнова', 'A', 'POSITIVE', 'Детская клиническая больница', 'пр. Победы, 10, Санкт-Петербург', 'MEDIUM', 'Плановое переливание крови', '+79994445566');
